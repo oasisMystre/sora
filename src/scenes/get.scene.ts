@@ -66,7 +66,7 @@ export const getVideoScene = new Scenes.WizardScene<Scenes.WizardContext>(
       return;
     }
 
-    ctx.wizard.back();
+    ctx.wizard.leave();
   },
   stepHandler
 );
