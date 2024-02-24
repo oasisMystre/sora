@@ -78,7 +78,7 @@ export const generateImageScene = new Scenes.WizardScene<Scenes.WizardContext>(
       });
     }
 
-    ctx.scene.reenter();
+    ctx.scene.leave();
   }
 );
 export const generateVideoScene = new Scenes.WizardScene<Scenes.WizardContext>(
