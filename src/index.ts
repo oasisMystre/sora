@@ -1,3 +1,4 @@
+import fs from "fs";
 import "dotenv/config";
 import { Telegraf, Scenes, session, Markup } from "telegraf";
 
@@ -8,10 +9,7 @@ import generateScene, {
 } from "./scenes/generate.scene";
 import { GENERATE_SCENE, GET_SCENE } from "./constants";
 
-export function main() {
-  const bot = new Telegraf<Scenes.WizardContext>(
-    process.env.TELEGRAM_BOT_API_KEY
-  );
+export function main(bot: Telegraf<Scenes.WizardContext>) {
   const stage = new Scenes.Stage<Scenes.SceneContext>([
     getScene,
     generateScene,
@@ -46,29 +44,7 @@ export function main() {
   });
 
   bot.command("help", (ctx) => {
-    return ctx.replyWithMarkdownV2(
-      `I can help you create ai generated images and videos. If you are new to Sora Bot, Please read the below manual.
-      
-       You can control me by sending these commands:
-       
-       /get get a media file by id
-       /generate generate short video from text prompt
-
-      Steps to generate ai media
-
-      1. Type the command /generate
-      2. Select the video or image option
-      3. Input your prompt
-      4. An image or media id will be returned
-
-      Steps to get a media output using id
-      
-      1. Type the command /get
-      2. Select the video option
-      3. Input your video id
-      4. The media will be returned
-      `
-    );
+    return ctx.replyWithMarkdownV2(fs.readFileSync("./help.md", "utf-8"));
   });
 
   bot.action("get", async (ctx) => {
@@ -88,9 +64,13 @@ export function main() {
 
   console.log("Bot starting...");
   bot.launch();
-
-  process.once("SIGINT", () => bot.stop("SIGINT"));
-  process.once("SIGTERM", () => bot.stop("SIGTERM"));
 }
 
-main();
+const bot = new Telegraf<Scenes.WizardContext>(
+  process.env.TELEGRAM_BOT_API_KEY
+);
+
+main(bot);
+
+process.once("SIGINT", () => bot.stop("SIGINT"));
+process.once("SIGTERM", () => bot.stop("SIGTERM"));

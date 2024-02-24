@@ -109,7 +109,7 @@ export const generateVideoScene = new Scenes.WizardScene<Scenes.WizardContext>(
     await ctx.replyWithPhoto(
       { source: image },
       {
-        caption: `Video Id [${data.id}](${data.id})`,
+        caption: `Video Id /\`${data.id}/\``,
         parse_mode: "MarkdownV2",
       }
     );
