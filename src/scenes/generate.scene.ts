@@ -69,6 +69,11 @@ export const generateImageScene = new Scenes.WizardScene<Scenes.WizardContext>(
   },
   async (ctx) => {
     const message = (ctx.message as any).text;
+    if(message.trim().length === 0){
+       await ctx.scene.leave();
+       return;
+    }
+    
     const { data } = await Api.instance.image.generateImage({
       text_prompts: [
         {
@@ -98,8 +103,13 @@ export const generateVideoScene = new Scenes.WizardScene<Scenes.WizardContext>(
     ctx.wizard.next();
   },
   async (ctx) => {
+    const message = (ctx.message as any).text;
+    if(message.trim().length === 0){
+       await ctx.scene.leave();
+       return;
+    }
+
     try {
-      const message = (ctx.message as any).text;
       const { data: imageResponse } = await Api.instance.image.generateImage({
         width: 768,
         height: 768,
