@@ -46,8 +46,8 @@ const generateScene = new Scenes.WizardScene<Scenes.WizardContext>(
     ctx.reply(
       "What do you want to generate?",
       Markup.inlineKeyboard([
-        Markup.button.callback("image", GENERATE_IMAGE_ACTION),
-        Markup.button.callback("video", GENERATE_VIDEO_ACTION),
+        Markup.button.callback("image 📷", GENERATE_IMAGE_ACTION),
+        Markup.button.callback("video 📽", GENERATE_VIDEO_ACTION),
       ])
     );
 
@@ -59,7 +59,7 @@ const generateScene = new Scenes.WizardScene<Scenes.WizardContext>(
 export const generateImageScene = new Scenes.WizardScene<Scenes.WizardContext>(
   GENERATE_IMAGE_SCENE,
   async (ctx) => {
-    await ctx.reply("Enter your prompt?");
+    await ctx.reply("Enter your prompt 📫?");
     ctx.wizard.next();
   },
   async (ctx) => {
@@ -78,49 +78,50 @@ export const generateImageScene = new Scenes.WizardScene<Scenes.WizardContext>(
       });
     }
 
-    await ctx.scene.leave();
+    ctx.wizard.back();
   }
 );
 export const generateVideoScene = new Scenes.WizardScene<Scenes.WizardContext>(
   GENERATE_VIDEO_SCENE,
   async (ctx) => {
-    await ctx.reply("Enter your prompt?");
+    await ctx.reply("Enter your prompt? 📫");
     ctx.wizard.next();
   },
   async (ctx) => {
     try {
-    const message = (ctx.message as any).text;
-    const { data: imageResponse } = await Api.instance.image.generateImage({
-      width: 768,
-      height: 768,
-      text_prompts: [
+      const message = (ctx.message as any).text;
+      const { data: imageResponse } = await Api.instance.image.generateImage({
+        width: 768,
+        height: 768,
+        text_prompts: [
+          {
+            text: message,
+          },
+        ],
+      });
+
+      const image = Buffer.from(
+        imageResponse.artifacts.at(0)!.base64,
+        "base64"
+      );
+
+      const { data } = await Api.instance.video.generateVideo({
+        image,
+      });
+
+      await ctx.replyWithPhoto(
+        { source: image },
         {
-          text: message,
-        },
-      ],
-    });
-
-    const image = Buffer.from(imageResponse.artifacts.at(0)!.base64, "base64");
-
-    const { data } = await Api.instance.video.generateVideo({
-      image,
-    });
-
-    console.log(data);
-
-    await ctx.replyWithPhoto(
-      { source: image },
-      {
-        caption: `Video Id \`${data.id}\``,
-        parse_mode: "MarkdownV2",
-      }
-    );
-    } catch(error){
-      if(isAxiosError(error)){
+          caption: `Video Id \`${data.id}\``,
+          parse_mode: "MarkdownV2",
+        }
+      );
+    } catch (error) {
+      if (isAxiosError(error))
         await ctx.reply(error.response.data.errors.join(","));
-      }
     }
-    await ctx.scene.leave();
+
+    ctx.wizard.back();
   }
 );
 

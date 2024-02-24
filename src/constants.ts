@@ -12,3 +12,5 @@ export const GENERATE_IMAGE_SCENE = "generate-image-scene";
 export const GET_SCENE = "GET_SCENARIO_SCENE";
 export const GENERATE_SCENE = "GENERATE_SCENARIO_SCENE";
 
+export const RETRY_GET_VIDEO = "retry-get-video";
+export const RETRY_GET_VIDEO_ACTION = "retry-get-video-action";

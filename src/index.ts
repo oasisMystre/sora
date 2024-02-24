@@ -2,7 +2,7 @@ import fs from "fs";
 import "dotenv/config";
 import { Telegraf, Scenes, session, Markup } from "telegraf";
 
-import getScene, { getImageScene, getVideoScene } from "./scenes/get.scene";
+import getScene, { getVideoScene } from "./scenes/get.scene";
 import generateScene, {
   generateImageScene,
   generateVideoScene,
@@ -13,7 +13,6 @@ export function main(bot: Telegraf<Scenes.WizardContext>) {
   const stage = new Scenes.Stage<Scenes.SceneContext>([
     getScene,
     generateScene,
-    getImageScene,
     getVideoScene,
     generateImageScene,
     generateVideoScene,
@@ -29,6 +28,10 @@ export function main(bot: Telegraf<Scenes.WizardContext>) {
     {
       command: "get",
       description: "get a media file by id",
+    },
+    {
+      command: "cancel",
+      description: "Cancel and go back to main menu",
     },
     {
       command: "help",
