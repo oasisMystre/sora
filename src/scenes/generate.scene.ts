@@ -78,7 +78,7 @@ export const generateImageScene = new Scenes.WizardScene<Scenes.WizardContext>(
       });
     }
 
-    ctx.wizard.back();
+    ctx.scene.reenter();
   }
 );
 export const generateVideoScene = new Scenes.WizardScene<Scenes.WizardContext>(
@@ -121,7 +121,7 @@ export const generateVideoScene = new Scenes.WizardScene<Scenes.WizardContext>(
         await ctx.reply(error.response.data.errors.join(","));
     }
 
-    ctx.wizard.back();
+    ctx.scene.reenter();
   }
 );
 
