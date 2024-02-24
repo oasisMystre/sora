@@ -49,8 +49,10 @@ export function main(bot: Telegraf<Scenes.WizardContext>) {
   });
 
   scenes.forEach(scene => {
-    scene.leave(ctx => ctx.reply("Scene cancelled"));
-    scene.command("cancel", ctx => ctx.scene.leave());
+    scene.command("cancel", async ctx => {
+      await ctx.scene.leave();
+      await ctx.reply("Scene cancelled");
+    });
   });
 
   bot.command("help", (ctx) => {
