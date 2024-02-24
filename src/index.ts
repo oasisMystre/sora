@@ -32,12 +32,42 @@ export function main() {
       command: "generate",
       description: "generate short video from text prompt",
     },
+    {
+      command: "help",
+      description: "Show sora help",
+    },
   ]);
 
   bot.start((ctx) => {
     return ctx.reply(
       "Welcome to sora video and image generation bot. Select an action!",
       Markup.keyboard([["/get"], ["/generate"]])
+    );
+  });
+
+  bot.help((ctx) => {
+    return ctx.replyWithMarkdownV2(
+      `I can help you create ai generated images and videos. If you are new to Sora Bot, Please read the below manual.
+      
+       You can control me by sending these commands:
+       
+       /get get a media file by id
+       /generate generate short video from text prompt
+
+      Steps to generate ai media
+
+      1. Type the command /generate
+      2. Select the video or image option
+      3. Input your prompt
+      4. An image or media id will be returned
+
+      Steps to get a media output using id
+      
+      1. Type the command /get
+      2. Select the video option
+      3. Input your video id
+      4. The media will be returned
+      `
     );
   });
 
