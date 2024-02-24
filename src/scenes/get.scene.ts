@@ -55,7 +55,7 @@ export const getVideoScene = new Scenes.WizardScene<Scenes.WizardContext>(
         return;
     }
     
-    const response = await Api.instance.video.getVideo(message);
+    const response = await Api.instance.video.getVideo(message.text);
 
     if (response) ctx.replyWithVideo(Input.fromBuffer(response));
     else {
