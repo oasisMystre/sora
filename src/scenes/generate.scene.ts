@@ -71,6 +71,7 @@ export const generateImageScene = new Scenes.WizardScene<Scenes.WizardContext>(
     const message = (ctx.message as any);
 
     if(!message || message.text.trim().length === 0){
+       await ctx.reply("Image generation cancelled");
        await ctx.scene.leave();
        return;
     }
@@ -107,6 +108,7 @@ export const generateVideoScene = new Scenes.WizardScene<Scenes.WizardContext>(
     const message = (ctx.message as any);
 
     if(!message || message.text.trim().length === 0){
+       await ctx.reply("Video generation cancelled");
        await ctx.scene.leave();
        return;
     }
