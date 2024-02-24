@@ -68,8 +68,9 @@ export const generateImageScene = new Scenes.WizardScene<Scenes.WizardContext>(
     ctx.wizard.next();
   },
   async (ctx) => {
-    const message = (ctx.message as any).text;
-    if(message.trim().length === 0){
+    const message = (ctx.message as any);
+
+    if(!message || message.text.trim().length === 0){
        await ctx.scene.leave();
        return;
     }
@@ -77,7 +78,7 @@ export const generateImageScene = new Scenes.WizardScene<Scenes.WizardContext>(
     const { data } = await Api.instance.image.generateImage({
       text_prompts: [
         {
-          text: message,
+          text: message.text,
         },
       ],
     });
@@ -103,8 +104,9 @@ export const generateVideoScene = new Scenes.WizardScene<Scenes.WizardContext>(
     ctx.wizard.next();
   },
   async (ctx) => {
-    const message = (ctx.message as any).text;
-    if(message.trim().length === 0){
+    const message = (ctx.message as any);
+
+    if(!message || message.text.trim().length === 0){
        await ctx.scene.leave();
        return;
     }
@@ -115,7 +117,7 @@ export const generateVideoScene = new Scenes.WizardScene<Scenes.WizardContext>(
         height: 768,
         text_prompts: [
           {
-            text: message,
+            text: message.text,
           },
         ],
       });
