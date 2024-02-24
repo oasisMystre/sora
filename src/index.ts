@@ -23,12 +23,12 @@ export function main(bot: Telegraf<Scenes.WizardContext>) {
 
   bot.telegram.setMyCommands([
     {
-      command: "get",
-      description: "get a media file by id",
-    },
-    {
       command: "generate",
       description: "generate short video from text prompt",
+    },
+    {
+      command: "get",
+      description: "get a media file by id",
     },
     {
       command: "help",

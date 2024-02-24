@@ -5,8 +5,8 @@ if you are new to Sora Bot, please read the below manual
 
 You can control me by sending these commands:
 
-/get get a media file by id
 /generate generate short video from text prompt
+/get get a media file by id
 
 Steps to generate ai media
 
