@@ -57,7 +57,7 @@ export const getVideoScene = new Scenes.WizardScene<Scenes.WizardContext>(
       await ctx.reply(
         "Video still generating in background ✨! Try again couple of seconds.",
         Markup.inlineKeyboard([
-          Markup.button.callback("Retry", "try-again"),
+          Markup.button.callback("Retry", RETRY_GET_VIDEO_ACTION),
         ])
       );
 
