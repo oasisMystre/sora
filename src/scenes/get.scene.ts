@@ -44,11 +44,17 @@ const getScene = new Scenes.WizardScene<Scenes.WizardContext>(
 export const getVideoScene = new Scenes.WizardScene<Scenes.WizardContext>(
   GET_VIDEO_SCENE,
   async (ctx) => {
-    await ctx.reply("Enter video id 📫");
+    await ctx.reply(
+     "Enter video id:", 
+      Markup.inlineKeyboard([
+          Markup.button.callback("Cancel", CANCEL_ACTION),
+      ])
+    );
     ctx.wizard.next();
   },
   async (ctx) => {
     const message = (ctx.message as any);
+
     if(!message || message.text.trim().length === 0){
         await ctx.reply("Get video cancelled");
         await ctx.scene.leave();
@@ -61,9 +67,6 @@ export const getVideoScene = new Scenes.WizardScene<Scenes.WizardContext>(
     else {
       await ctx.reply(
         "Video still generating in background ✨!",
-        Markup.inlineKeyboard([
-          Markup.button.callback("Cancel", CANCEL_ACTION),
-        ])
       );
 
       await ctx.scene.reenter();
