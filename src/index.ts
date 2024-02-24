@@ -45,7 +45,7 @@ export function main() {
     );
   });
 
-  bot.help((ctx) => {
+  bot.command("help", (ctx) => {
     return ctx.replyWithMarkdownV2(
       `I can help you create ai generated images and videos. If you are new to Sora Bot, Please read the below manual.
       
