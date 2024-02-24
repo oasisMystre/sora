@@ -3,7 +3,7 @@ import {
   GET_SCENE,
   GET_VIDEO_ACTION,
   GET_VIDEO_SCENE,
-  RETRY_GET_VIDEO_ACTION,
+  CANCEL_ACTION,
 } from "../constants";
 import { Api } from "../lib";
 
@@ -14,9 +14,8 @@ stepHandler.action(GET_VIDEO_ACTION, async (ctx) => {
   await ctx.scene.enter(GET_VIDEO_SCENE);
 });
 
-stepHandler.action(RETRY_GET_VIDEO_ACTION, async (ctx) => {
+stepHandler.action(CANCEL_ACTION, async (ctx) => {
   await ctx.scene.leave();
-  await ctx.scene.reenter();
 });
 
 stepHandler.command("cancel", async (ctx) => {
@@ -49,19 +48,25 @@ export const getVideoScene = new Scenes.WizardScene<Scenes.WizardContext>(
     ctx.wizard.next();
   },
   async (ctx) => {
-    const message = (ctx.message as any).text;
+    const message = (ctx.message as any);
+    if(!message || message.text.trim().length === 0){
+        await ctx.reply("Get video cancelled");
+        await ctx.scene.leave();
+        return;
+    }
+    
     const response = await Api.instance.video.getVideo(message);
 
     if (response) ctx.replyWithVideo(Input.fromBuffer(response));
     else {
       await ctx.reply(
-        "Video still generating in background ✨! Try again couple of seconds.",
+        "Video still generating in background ✨!",
         Markup.inlineKeyboard([
-          Markup.button.callback("Retry", RETRY_GET_VIDEO_ACTION),
+          Markup.button.callback("Cancel", CANCEL_ACTION),
         ])
       );
 
-      return;
+      await ctx.scene.reenter();
     }
 
     ctx.scene.leave();
