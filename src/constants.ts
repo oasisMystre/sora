@@ -1,3 +1,4 @@
+export const CANCEL_ACTION = "cancel";
 export const VIDEO_ACTION = "video";
 export const IMAGE_ACTION = "image";
 export const GET_IMAGE_ACTION = "get-image-action";
