@@ -4,6 +4,7 @@ import { isAxiosError } from "axios";
 import { Scenes, Markup, Composer } from "telegraf";
 
 import {
+  CANCEL_ACTION,
   GENERATE_IMAGE_ACTION,
   GENERATE_IMAGE_SCENE,
   GENERATE_SCENE,
@@ -33,7 +34,7 @@ stepHandler.command(GENERATE_VIDEO_ACTION, async (ctx) => {
   await ctx.scene.enter(GENERATE_VIDEO_SCENE);
 });
 
-stepHandler.command("cancel", async (ctx) => {
+stepHandler.command(CANCEL_ACTION, async (ctx) => {
   await ctx.scene.leave();
 });
 
@@ -59,7 +60,11 @@ const generateScene = new Scenes.WizardScene<Scenes.WizardContext>(
 export const generateImageScene = new Scenes.WizardScene<Scenes.WizardContext>(
   GENERATE_IMAGE_SCENE,
   async (ctx) => {
-    await ctx.reply("Enter your prompt 📫?");
+    await ctx.reply("Enter your prompt?",
+      Markup.inlineKeyboard([
+        Markup.button.callback("Cancel", CANCEL_ACTION),
+      ]),
+    );
     ctx.wizard.next();
   },
   async (ctx) => {
@@ -78,13 +83,18 @@ export const generateImageScene = new Scenes.WizardScene<Scenes.WizardContext>(
       });
     }
 
-    ctx.scene.leave();
+    ctx.scene.reenter();
   }
 );
 export const generateVideoScene = new Scenes.WizardScene<Scenes.WizardContext>(
   GENERATE_VIDEO_SCENE,
   async (ctx) => {
-    await ctx.reply("Enter your prompt? 📫");
+    await ctx.reply(
+      "Enter your prompt?", 
+      Markup.inlineKeyboard([
+        Markup.button.callback("Cancel", CANCEL_ACTION),
+      ]),
+    );
     ctx.wizard.next();
   },
   async (ctx) => {
@@ -121,7 +131,7 @@ export const generateVideoScene = new Scenes.WizardScene<Scenes.WizardContext>(
         await ctx.reply(error.response.data.errors.join(","));
     }
 
-    ctx.scene.leave();
+    ctx.scene.reenter();
   }
 );
 
