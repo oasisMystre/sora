@@ -46,9 +46,9 @@ export const getVideoScene = new Scenes.WizardScene<Scenes.WizardContext>(
   async (ctx) => {
     await ctx.reply(
      "Enter video id:", 
-      Markup.inlineKeyboard([
-          Markup.button.callback("Cancel", CANCEL_ACTION),
-      ])
+      //Markup.inlineKeyboard([
+          // Markup.button.callback("Cancel", CANCEL_ACTION),
+      // ])
     );
     ctx.wizard.next();
   },
