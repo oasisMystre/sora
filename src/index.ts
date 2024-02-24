@@ -61,9 +61,6 @@ export function main(bot: Telegraf<Scenes.WizardContext>) {
   bot.command("generate", async (ctx) => {
     ctx.scene.enter(GENERATE_SCENE);
   });
-
-  console.log("Bot starting...");
-  bot.launch();
 }
 
 const bot = new Telegraf<Scenes.WizardContext>(
@@ -71,6 +68,9 @@ const bot = new Telegraf<Scenes.WizardContext>(
 );
 
 main(bot);
+
+console.log("Bot starting...");
+bot.launch();
 
 process.once("SIGINT", () => bot.stop("SIGINT"));
 process.once("SIGTERM", () => bot.stop("SIGTERM"));
