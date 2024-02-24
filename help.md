@@ -8,16 +8,16 @@ You can control me by sending these commands:
 /generate generate short video from text prompt
 /get get a media file by id
 
-Steps to generate ai media
+*Steps to generate ai media*
 
-*Type the command /generate*
-*Select the video or image option*
-*Input your prompt*
-*An image or media id will be returned*
+_Type the command /generate_
+_Select the video or image option_
+_Input your prompt_
+_An image or media id will be returned_
 
-Steps to get a media output using id
+*Steps to get a media output using id*
 
-*Type the command /get*
-*Select the video option*
-*Input your video id*
-*The media will be returned*
+_Type the command /get_
+_Select the video option_
+_Input your video id_
+_The media will be returned_
