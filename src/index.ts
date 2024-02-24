@@ -18,10 +18,6 @@ export function main(bot: Telegraf<Scenes.WizardContext>) {
     generateVideoScene,
   ];
   const stage = new Scenes.Stage<Scenes.SceneContext>(scenes);
-  
-  scenes.forEach(scene => {
-    scene.on("cancel", ctx => ctx.scene.leave());
-  });
 
   bot.use(session());
   bot.use(stage.middleware());
@@ -50,6 +46,10 @@ export function main(bot: Telegraf<Scenes.WizardContext>) {
       "Welcome to sora video and image generation bot. Select an action!",
       Markup.keyboard([["/get"], ["/generate"]])
     );
+  });
+
+  scenes.forEach(scene => {
+    scene.command("cancel", ctx => ctx.scene.leave());
   });
 
   bot.command("help", (ctx) => {
