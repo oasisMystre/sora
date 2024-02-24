@@ -121,7 +121,7 @@ export const generateVideoScene = new Scenes.WizardScene<Scenes.WizardContext>(
         await ctx.reply(error.response.data.errors.join(","));
     }
 
-    ctx.scene.reenter();
+    ctx.scene.leave();
   }
 );
 
