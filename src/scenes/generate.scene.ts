@@ -1,5 +1,6 @@
 import fs from "fs";
 import tmp from "tmp";
+import { isAxiosError } from "axios";
 import { Scenes, Markup, Composer } from "telegraf";
 
 import {
@@ -87,6 +88,7 @@ export const generateVideoScene = new Scenes.WizardScene<Scenes.WizardContext>(
     ctx.wizard.next();
   },
   async (ctx) => {
+    try {
     const message = (ctx.message as any).text;
     const { data: imageResponse } = await Api.instance.image.generateImage({
       width: 768,
@@ -113,7 +115,11 @@ export const generateVideoScene = new Scenes.WizardScene<Scenes.WizardContext>(
         parse_mode: "MarkdownV2",
       }
     );
-
+    } catch(error){
+      if(isAxiosError(error)){
+        await ctx.reply(error.response.data.errors.join(","));
+      }
+    }
     await ctx.scene.leave();
   }
 );
