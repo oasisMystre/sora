@@ -10,13 +10,19 @@ import generateScene, {
 import { GENERATE_SCENE, GET_SCENE } from "./constants";
 
 export function main(bot: Telegraf<Scenes.WizardContext>) {
-  const stage = new Scenes.Stage<Scenes.SceneContext>([
+  const scenes = [
     getScene,
     generateScene,
     getVideoScene,
     generateImageScene,
     generateVideoScene,
-  ]);
+  ];
+  const stage = new Scenes.Stage<Scenes.SceneContext>(scenes);
+  
+  scenes.forEach(scene => {
+    scene.on("cancel", ctx => ctx.scene.leave());
+  });
+
   bot.use(session());
   bot.use(stage.middleware());
 
