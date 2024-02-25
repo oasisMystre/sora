@@ -154,7 +154,7 @@ export const generateVideoScene = new Scenes.WizardScene<Scenes.WizardContext>(
         image,
       });
 
-      await sleep(30000);
+      await sleep(150000);
       await ctx.replyWithPhoto(
         { source: image },
         {
