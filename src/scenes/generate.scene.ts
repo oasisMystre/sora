@@ -35,6 +35,8 @@ stepHandler.command(GENERATE_VIDEO_ACTION, async (ctx) => {
 });
 
 stepHandler.command(CANCEL_ACTION, async (ctx) => {
+  const session = ctx.session as any;
+  session.isRetry = false;
   await ctx.scene.leave();
 });
 
@@ -60,7 +62,9 @@ const generateScene = new Scenes.WizardScene<Scenes.WizardContext>(
 export const generateImageScene = new Scenes.WizardScene<Scenes.WizardContext>(
   GENERATE_IMAGE_SCENE,
   async (ctx) => {
-    const isRetrying = ctx.session.isRetrying as boolean | undefined;
+    const session = ctx.session as any;
+    const isRetrying = session.isRetrying as boolean | undefined;
+    
     if(isRetrying)
       await ctx.reply("Enter another prompt",
         Markup.inlineKeyboard([
@@ -69,13 +73,15 @@ export const generateImageScene = new Scenes.WizardScene<Scenes.WizardContext>(
       );
     else
       await ctx.reply("Enter your prompt");
+    
     ctx.wizard.next();
   },
   async (ctx) => {
-    const message = (ctx.message as any);
+    const session = ctx.session as any;
+    const message = ctx.message as any;
 
     if(!message || message.text.trim().length === 0){
-       ctx.session.isRetrying = false;
+       session.isRetrying = false;
        await ctx.reply("Image generation cancelled");
        await ctx.scene.leave();
        return;
@@ -95,14 +101,16 @@ export const generateImageScene = new Scenes.WizardScene<Scenes.WizardContext>(
       });
     }
 
-    ctx.session.isRetrying = true;
+    session.isRetrying = true;
     ctx.scene.reenter();
   }
 );
 export const generateVideoScene = new Scenes.WizardScene<Scenes.WizardContext>(
   GENERATE_VIDEO_SCENE,
   async (ctx) => {
-    const isRetrying = ctx.session.isRetrying as boolean | undefined;
+    const session = ctx.session as any;
+    const isRetrying = session.isRetrying as boolean | undefined;
+    
     if(isRetrying)
       await ctx.reply(
         "Enter another prompt or cancel to get video", 
@@ -112,15 +120,17 @@ export const generateVideoScene = new Scenes.WizardScene<Scenes.WizardContext>(
       );
     else
       await ctx.reply("Enter your prompt");
+    
     ctx.wizard.next();
   },
   async (ctx) => {
-    const message = (ctx.message as any);
+    const session = ctx.session as any;
+    const message = ctx.message as any;
 
     if(!message || message.text.trim().length === 0){
        await ctx.reply("Video generation cancelled");
        await ctx.scene.leave();
-       ctx.session.isRetrying = false;
+       session.isRetrying = false;
        return;
     }
 
@@ -155,7 +165,8 @@ export const generateVideoScene = new Scenes.WizardScene<Scenes.WizardContext>(
       if (isAxiosError(error))
         await ctx.reply(error.response.data.errors.join(","));
     }
-    ctx.session.isRetrying = true;
+
+    session.isRetrying = true;
     ctx.scene.reenter();
   }
 );
