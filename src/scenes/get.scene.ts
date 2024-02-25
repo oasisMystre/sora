@@ -50,7 +50,7 @@ export const getVideoScene = new Scenes.WizardScene<Scenes.WizardContext>(
     ctx.wizard.next();
   },
   async (ctx) => {
-    await sleep(30000);
+    await sleep(10000);
 
     const message = ctx.message as any;
     const response = await Api.instance.video.getVideo(message.text);
