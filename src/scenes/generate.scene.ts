@@ -60,17 +60,22 @@ const generateScene = new Scenes.WizardScene<Scenes.WizardContext>(
 export const generateImageScene = new Scenes.WizardScene<Scenes.WizardContext>(
   GENERATE_IMAGE_SCENE,
   async (ctx) => {
-    await ctx.reply("Enter your prompt?",
-      Markup.inlineKeyboard([
-        Markup.button.callback("Cancel", CANCEL_ACTION),
-      ]),
-    );
+    const isRetrying = ctx.session.isRetrying as boolean | undefined;
+    if(isRetrying)
+      await ctx.reply("Enter another prompt",
+        Markup.inlineKeyboard([
+          Markup.button.callback("Cancel", CANCEL_ACTION),
+        ]),
+      );
+    else
+      await ctx.reply("Enter your prompt");
     ctx.wizard.next();
   },
   async (ctx) => {
     const message = (ctx.message as any);
 
     if(!message || message.text.trim().length === 0){
+       ctx.session.isRetrying = false;
        await ctx.reply("Image generation cancelled");
        await ctx.scene.leave();
        return;
@@ -90,18 +95,23 @@ export const generateImageScene = new Scenes.WizardScene<Scenes.WizardContext>(
       });
     }
 
+    ctx.session.isRetrying = true;
     ctx.scene.reenter();
   }
 );
 export const generateVideoScene = new Scenes.WizardScene<Scenes.WizardContext>(
   GENERATE_VIDEO_SCENE,
   async (ctx) => {
-    await ctx.reply(
-      "Enter your prompt?", 
-      Markup.inlineKeyboard([
-        Markup.button.callback("Cancel", CANCEL_ACTION),
-      ]),
-    );
+    const isRetrying = ctx.session.isRetrying as boolean | undefined;
+    if(isRetrying)
+      await ctx.reply(
+        "Enter another prompt or cancel to get video", 
+        Markup.inlineKeyboard([
+          Markup.button.callback("Cancel", CANCEL_ACTION),
+        ]),
+      );
+    else
+      await ctx.reply("Enter your prompt");
     ctx.wizard.next();
   },
   async (ctx) => {
@@ -110,6 +120,7 @@ export const generateVideoScene = new Scenes.WizardScene<Scenes.WizardContext>(
     if(!message || message.text.trim().length === 0){
        await ctx.reply("Video generation cancelled");
        await ctx.scene.leave();
+       ctx.session.isRetrying = false;
        return;
     }
 
@@ -144,7 +155,7 @@ export const generateVideoScene = new Scenes.WizardScene<Scenes.WizardContext>(
       if (isAxiosError(error))
         await ctx.reply(error.response.data.errors.join(","));
     }
-
+    ctx.session.isRetrying = true;
     ctx.scene.reenter();
   }
 );
