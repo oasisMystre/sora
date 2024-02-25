@@ -154,7 +154,7 @@ export const generateVideoScene = new Scenes.WizardScene<Scenes.WizardContext>(
         image,
       });
 
-      await sleep(15000);
+      await sleep(10000);
       await ctx.replyWithPhoto(
         { source: image },
         {
@@ -167,8 +167,8 @@ export const generateVideoScene = new Scenes.WizardScene<Scenes.WizardContext>(
         await ctx.reply(error.response.data.errors.join(","));
     }
 
-    session.isRetrying = true;
-    ctx.scene.reenter();
+    session.isRetrying = false;
+    ctx.scene.leave();
   }
 );
 
