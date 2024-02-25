@@ -11,7 +11,7 @@ import {
   GENERATE_VIDEO_ACTION,
   GENERATE_VIDEO_SCENE,
 } from "../constants";
-import { Api } from "../lib";
+import { Api, sleep } from "../lib";
 
 const stepHandler = new Composer<Scenes.SceneContext>();
 
@@ -154,6 +154,7 @@ export const generateVideoScene = new Scenes.WizardScene<Scenes.WizardContext>(
         image,
       });
 
+      await sleep(30000);
       await ctx.replyWithPhoto(
         { source: image },
         {
