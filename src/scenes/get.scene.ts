@@ -5,7 +5,7 @@ import {
   GET_VIDEO_SCENE,
   CANCEL_ACTION,
 } from "../constants";
-import { Api } from "../lib";
+import { Api, sleep } from "../lib";
 
 const stepHandler = new Composer<Scenes.SceneContext>();
 
@@ -45,32 +45,21 @@ export const getVideoScene = new Scenes.WizardScene<Scenes.WizardContext>(
   GET_VIDEO_SCENE,
   async (ctx) => {
     await ctx.reply(
-     "Enter video id:", 
-      //Markup.inlineKeyboard([
-          // Markup.button.callback("Cancel", CANCEL_ACTION),
-      // ])
+     "Enter video id:"
     );
     ctx.wizard.next();
   },
   async (ctx) => {
-    const message = (ctx.message as any);
+    await sleep(30000);
 
-    if(!message || message.text.trim().length === 0){
-        await ctx.reply("Get video cancelled");
-        await ctx.scene.leave();
-        return;
-    }
-    
+    const message = ctx.message as any;
     const response = await Api.instance.video.getVideo(message.text);
 
     if (response) ctx.replyWithVideo(Input.fromBuffer(response));
-    else {
+    else
       await ctx.reply(
         "Video still generating in background ✨!",
       );
-
-      await ctx.scene.reenter();
-    }
 
     ctx.scene.leave();
   },
