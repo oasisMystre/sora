@@ -134,7 +134,7 @@ export const generateVideoScene = new Scenes.WizardScene<Scenes.WizardContext>(
        return;
     }
 
-    await ctx.reply("Sora generating video...");
+    await ctx.reply("Sora generating video id...");
 
     try {
       const { data: imageResponse } = await Api.instance.image.generateImage({
