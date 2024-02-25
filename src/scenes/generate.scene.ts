@@ -144,6 +144,9 @@ export const generateVideoScene = new Scenes.WizardScene<Scenes.WizardContext>(
           {
             text: message.text,
           },
+          {
+            text: "This is a prompt for a video generative ai",
+          },
         ],
       });
 
