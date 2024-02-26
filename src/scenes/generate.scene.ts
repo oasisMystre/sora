@@ -134,8 +134,7 @@ export const generateVideoScene = new Scenes.WizardScene<Scenes.WizardContext>(
        return;
     }
 
-    await ctx.reply("Sora generating video id...\n Video generation might take up to a minute o 
-ore...");
+    await ctx.reply("Sora generating video id...\n Video generation might take up to a minute or more...");
 
     try {
       const { data: imageResponse } = await Api.instance.image.generateImage({
