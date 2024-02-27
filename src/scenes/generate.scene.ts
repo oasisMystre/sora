@@ -101,8 +101,8 @@ export const generateImageScene = new Scenes.WizardScene<Scenes.WizardContext>(
       });
     }
 
-    session.isRetrying = true;
-    ctx.scene.reenter();
+    session.isRetrying = false;
+    ctx.scene.leave();
   }
 );
 export const generateVideoScene = new Scenes.WizardScene<Scenes.WizardContext>(
