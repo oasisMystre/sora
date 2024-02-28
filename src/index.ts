@@ -30,6 +30,10 @@ export function main(bot: Telegraf<Scenes.WizardContext>) {
       command: "help",
       description: "Show sora help",
     },
+    {
+      command: "socials",
+      description: "Show our social media handles and website",
+    },
   ]);
 
   bot.start((ctx) => {

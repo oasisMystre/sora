@@ -1,5 +1,5 @@
 Join our socials
-[Telegram](https://t.m/soraicommunity)
+[Telegram](https://t.me/soraicommunity)
 [X](https://x.com/soraibot)
 
 Or visit our website
