@@ -22,7 +22,7 @@ export default class VideoApi extends ApiImpl {
     return this.axios.post<VideoResponse>(this.path, formData);
   }
 
-  async getVideo(id: number) {
+  async getVideo(id: string) {
     const response = await this.axios.get(this.buildPath("/result", id), {
       responseType: "arraybuffer",
       headers: {

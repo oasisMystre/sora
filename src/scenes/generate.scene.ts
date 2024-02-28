@@ -29,8 +29,15 @@ export const generateVideoScene = new Scenes.WizardScene<Scenes.WizardContext>(
   async (ctx) => {
     const session = ctx.session as any;
     const message = ctx.message as any;
+    const text = message.text;
 
-    if (!message || message.text.trim().length === 0) {
+    if (text.startsWith("/")) {
+      return ctx.reply(
+        "Can't run command. /cancel before running new command.",
+      );
+    }
+
+    if (!message || text.trim().length === 0) {
       await ctx.reply("Video generation cancelled");
       await ctx.scene.leave();
       session.isRetrying = false;
@@ -47,7 +54,7 @@ export const generateVideoScene = new Scenes.WizardScene<Scenes.WizardContext>(
         height: 768,
         text_prompts: [
           {
-            text: message.text,
+            text,
           },
           {
             text: "This is a prompt for a video generative ai",
