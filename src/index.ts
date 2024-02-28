@@ -2,21 +2,12 @@ import fs from "fs";
 import "dotenv/config";
 import { Telegraf, Scenes, session, Markup } from "telegraf";
 
-import getScene, { getVideoScene } from "./scenes/get.scene";
-import generateScene, {
-  generateImageScene,
-  generateVideoScene,
-} from "./scenes/generate.scene";
-import { GENERATE_SCENE, GET_SCENE } from "./constants";
+import { getVideoScene } from "./scenes/get.scene";
+import { generateVideoScene } from "./scenes/generate.scene";
+import { GENERATE_VIDEO_SCENE, GET_VIDEO_SCENE } from "./constants";
 
 export function main(bot: Telegraf<Scenes.WizardContext>) {
-  const scenes = [
-    getScene,
-    generateScene,
-    getVideoScene,
-    generateImageScene,
-    generateVideoScene,
-  ];
+  const scenes = [getVideoScene, generateVideoScene];
   const stage = new Scenes.Stage<Scenes.SceneContext>(scenes);
 
   bot.use(session());
@@ -43,13 +34,13 @@ export function main(bot: Telegraf<Scenes.WizardContext>) {
 
   bot.start((ctx) => {
     return ctx.reply(
-      "Welcome to sora video and image generation bot. Select an action!",
-      Markup.keyboard([["/get"], ["/generate"]])
+      "Welcome to sora video generation bot. Select an action!",
+      Markup.keyboard([["/get"], ["/generate"]]),
     );
   });
 
-  scenes.forEach(scene => {
-    scene.command("cancel", async ctx => {
+  scenes.forEach((scene) => {
+    scene.command("cancel", async (ctx) => {
       await ctx.scene.leave();
     });
   });
@@ -59,23 +50,23 @@ export function main(bot: Telegraf<Scenes.WizardContext>) {
   });
 
   bot.action("get", async (ctx) => {
-    ctx.scene.enter(GET_SCENE);
+    ctx.scene.enter(GET_VIDEO_SCENE);
   });
   bot.command("get", async (ctx) => {
-    ctx.scene.enter(GET_SCENE);
+    ctx.scene.enter(GET_VIDEO_SCENE);
   });
 
   bot.action("generate", async (ctx) => {
-    ctx.scene.enter(GENERATE_SCENE);
+    ctx.scene.enter(GENERATE_VIDEO_SCENE);
   });
 
   bot.command("generate", async (ctx) => {
-    ctx.scene.enter(GENERATE_SCENE);
+    ctx.scene.enter(GENERATE_VIDEO_SCENE);
   });
 }
 
 const bot = new Telegraf<Scenes.WizardContext>(
-  process.env.TELEGRAM_BOT_API_KEY
+  process.env.TELEGRAM_BOT_API_KEY,
 );
 
 main(bot);

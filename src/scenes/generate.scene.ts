@@ -1,140 +1,41 @@
-import fs from "fs";
-import tmp from "tmp";
 import { isAxiosError } from "axios";
-import { Scenes, Markup, Composer } from "telegraf";
+import { Scenes, Markup } from "telegraf";
 
-import {
-  CANCEL_ACTION,
-  GENERATE_IMAGE_ACTION,
-  GENERATE_IMAGE_SCENE,
-  GENERATE_SCENE,
-  GENERATE_VIDEO_ACTION,
-  GENERATE_VIDEO_SCENE,
-} from "../constants";
+import { CANCEL_ACTION, GENERATE_VIDEO_SCENE } from "../constants";
+
 import { Api, sleep } from "../lib";
 
-const stepHandler = new Composer<Scenes.SceneContext>();
-
-stepHandler.action(GENERATE_IMAGE_ACTION, async (ctx) => {
-  await ctx.scene.leave();
-  await ctx.scene.enter(GENERATE_IMAGE_SCENE);
-});
-stepHandler.command(GENERATE_IMAGE_ACTION, async (ctx) => {
-  await ctx.scene.leave();
-  await ctx.scene.enter(GENERATE_IMAGE_SCENE);
-});
-
-stepHandler.action(GENERATE_VIDEO_ACTION, async (ctx) => {
-  await ctx.scene.leave();
-
-  await ctx.scene.enter(GENERATE_VIDEO_SCENE);
-});
-stepHandler.command(GENERATE_VIDEO_ACTION, async (ctx) => {
-  await ctx.scene.leave();
-  await ctx.scene.enter(GENERATE_VIDEO_SCENE);
-});
-
-stepHandler.command(CANCEL_ACTION, async (ctx) => {
-  const session = ctx.session as any;
-  session.isRetry = false;
-  await ctx.scene.leave();
-});
-
-stepHandler.use((ctx) =>
-  ctx.replyWithMarkdownV2(`press /cancel to leave scene`)
-);
-const generateScene = new Scenes.WizardScene<Scenes.WizardContext>(
-  GENERATE_SCENE,
-  (ctx) => {
-    ctx.reply(
-      "What do you want to generate?",
-      Markup.inlineKeyboard([
-        Markup.button.callback("image 📷", GENERATE_IMAGE_ACTION),
-        Markup.button.callback("video 📽", GENERATE_VIDEO_ACTION),
-      ])
-    );
-
-    ctx.wizard.next();
-  },
-  stepHandler
-);
-
-export const generateImageScene = new Scenes.WizardScene<Scenes.WizardContext>(
-  GENERATE_IMAGE_SCENE,
-  async (ctx) => {
-    const session = ctx.session as any;
-    const isRetrying = session.isRetrying as boolean | undefined;
-    
-    if(isRetrying)
-      await ctx.reply("Enter another prompt",
-        Markup.inlineKeyboard([
-          Markup.button.callback("Cancel", CANCEL_ACTION),
-        ]),
-      );
-    else
-      await ctx.reply("Enter your prompt");
-    
-    ctx.wizard.next();
-  },
-  async (ctx) => {
-    const session = ctx.session as any;
-    const message = ctx.message as any;
-
-    if(!message || message.text.trim().length === 0){
-       session.isRetrying = false;
-       await ctx.reply("Image generation cancelled");
-       await ctx.scene.leave();
-       return;
-    }
-    
-    const { data } = await Api.instance.image.generateImage({
-      text_prompts: [
-        {
-          text: message.text,
-        },
-      ],
-    });
-
-    for (const artifact of data.artifacts) {
-      await ctx.replyWithPhoto({
-        source: Buffer.from(artifact.base64, "base64"),
-      });
-    }
-
-    session.isRetrying = false;
-    ctx.scene.leave();
-  }
-);
 export const generateVideoScene = new Scenes.WizardScene<Scenes.WizardContext>(
   GENERATE_VIDEO_SCENE,
   async (ctx) => {
     const session = ctx.session as any;
     const isRetrying = session.isRetrying as boolean | undefined;
-    
-    if(isRetrying)
+
+    if (isRetrying)
       await ctx.reply(
-        "Enter another prompt or cancel to get video", 
+        "Enter another prompt or cancel to get video",
         Markup.inlineKeyboard([
           Markup.button.callback("Cancel", CANCEL_ACTION),
         ]),
       );
-    else
-      await ctx.reply("Enter your prompt");
-    
+    else await ctx.reply("Enter your prompt");
+
     ctx.wizard.next();
   },
   async (ctx) => {
     const session = ctx.session as any;
     const message = ctx.message as any;
 
-    if(!message || message.text.trim().length === 0){
-       await ctx.reply("Video generation cancelled");
-       await ctx.scene.leave();
-       session.isRetrying = false;
-       return;
+    if (!message || message.text.trim().length === 0) {
+      await ctx.reply("Video generation cancelled");
+      await ctx.scene.leave();
+      session.isRetrying = false;
+      return;
     }
 
-    await ctx.reply("$SORAI is generating your Video ID.\n Video Generation might take up to a minute or more.");
+    await ctx.reply(
+      "$SORAI is generating your Video ID.\n Video Generation might take up to a minute or more.",
+    );
 
     try {
       const { data: imageResponse } = await Api.instance.image.generateImage({
@@ -152,7 +53,7 @@ export const generateVideoScene = new Scenes.WizardScene<Scenes.WizardContext>(
 
       const image = Buffer.from(
         imageResponse.artifacts.at(0)!.base64,
-        "base64"
+        "base64",
       );
 
       const { data } = await Api.instance.video.generateVideo({
@@ -165,16 +66,13 @@ export const generateVideoScene = new Scenes.WizardScene<Scenes.WizardContext>(
         {
           caption: `Video Id \`${data.id}\``,
           parse_mode: "MarkdownV2",
-        }
+        },
       );
     } catch (error) {
       if (isAxiosError(error))
         await ctx.reply(error.response.data.errors.join(","));
     }
 
-    session.isRetrying = false;
     ctx.scene.leave();
-  }
+  },
 );
-
-export default generateScene;
