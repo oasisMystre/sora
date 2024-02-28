@@ -21,3 +21,6 @@ _Type the command /get_
 _Select the video option_
 _Input your video id_
 _The media will be returned_
+
+
+_View our /socials_

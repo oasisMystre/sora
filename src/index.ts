@@ -35,7 +35,7 @@ export function main(bot: Telegraf<Scenes.WizardContext>) {
   bot.start((ctx) => {
     return ctx.reply(
       "Welcome to sora video generation bot. Select an action!",
-      Markup.keyboard([["/get"], ["/generate"]]),
+      Markup.keyboard([["/get"], ["/generate"], ["/socials"]]),
     );
   });
 
@@ -45,23 +45,27 @@ export function main(bot: Telegraf<Scenes.WizardContext>) {
     });
   });
 
-  bot.command("help", (ctx) => {
-    return ctx.replyWithMarkdownV2(fs.readFileSync("./help.md", "utf-8"));
+  bot.command("help", async (ctx) => {
+    await ctx.replyWithMarkdownV2(fs.readFileSync("./help.md", "utf-8"));
   });
 
   bot.action("get", async (ctx) => {
-    ctx.scene.enter(GET_VIDEO_SCENE);
+    await ctx.scene.enter(GET_VIDEO_SCENE);
   });
   bot.command("get", async (ctx) => {
-    ctx.scene.enter(GET_VIDEO_SCENE);
+    await ctx.scene.enter(GET_VIDEO_SCENE);
   });
 
   bot.action("generate", async (ctx) => {
-    ctx.scene.enter(GENERATE_VIDEO_SCENE);
+    await ctx.scene.enter(GENERATE_VIDEO_SCENE);
   });
 
   bot.command("generate", async (ctx) => {
-    ctx.scene.enter(GENERATE_VIDEO_SCENE);
+    await ctx.scene.enter(GENERATE_VIDEO_SCENE);
+  });
+
+  bot.command("socials", async (ctx) => {
+    await ctx.replyWithMarkdownV2(fs.readFileSync("./socials.md", "utf-8"));
   });
 }
 

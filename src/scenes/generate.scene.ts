@@ -1,7 +1,11 @@
 import { isAxiosError } from "axios";
 import { Scenes, Markup } from "telegraf";
 
-import { CANCEL_ACTION, GENERATE_VIDEO_SCENE } from "../constants";
+import {
+  CANCEL_ACTION,
+  GENERATE_VIDEO_SCENE,
+  VIDEO_DELAY_SECONDS,
+} from "../constants";
 
 import { Api, sleep } from "../lib";
 
@@ -60,7 +64,7 @@ export const generateVideoScene = new Scenes.WizardScene<Scenes.WizardContext>(
         image,
       });
 
-      await sleep(60000);
+      await sleep(VIDEO_DELAY_SECONDS * 1000);
       await ctx.replyWithPhoto(
         { source: image },
         {
