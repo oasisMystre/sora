@@ -1,6 +1,6 @@
-export const CANCEL_ACTION = "cancel";
-export const VIDEO_ACTION = "video";
-export const IMAGE_ACTION = "image";
+export const CANCEL_ACTION = "cancel-action";
+export const VIDEO_ACTION = "video-action";
+export const IMAGE_ACTION = "image-action";
 export const GET_IMAGE_ACTION = "get-image-action";
 export const GET_VIDEO_ACTION = "get-video-action";
 export const GENERATE_VIDEO_ACTION = "generate-video-action";
