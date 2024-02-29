@@ -5,3 +5,5 @@ services:
     envVars:
       - fromGroup: sora
     runtime: node
+    startCommand: pnpm start
+    buildCommand: pnpm install && tsc
