@@ -52,7 +52,7 @@ stepHandler.use((ctx) =>
 
 export const generateScene = new Scenes.WizardScene<Scenes.WizardContext>(
   GENERATE_SCENE,
-  (ctx) => {
+  async (ctx) => {
      await ctx.reply(
       "What do you want to generate?",
       Markup.inlineKeyboard([
