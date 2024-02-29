@@ -78,7 +78,7 @@ export function main(bot: Telegraf<Scenes.WizardContext>) {
   });
 
   bot.command("generate", async (ctx) => {
-    await ctx.scene.enter(GENERATE_VIDEO_SCENE);
+    await ctx.scene.enter(GENERATE_SCENE);
   });
 
   bot.command("socials", async (ctx) => {
