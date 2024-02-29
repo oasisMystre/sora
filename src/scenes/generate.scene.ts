@@ -82,6 +82,10 @@ export const generateImageScene = new Scenes.WizardScene<Scenes.WizardContext>(
       return;
     }
 
+    await ctx.reply(
+      "BlastAI is generating your Image...",
+    );
+
     const { data } = await Api.instance.image.generateImage({
       text_prompts: [
         {
