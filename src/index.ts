@@ -3,11 +3,24 @@ import "dotenv/config";
 import { Telegraf, Scenes, session, Markup } from "telegraf";
 
 import { getVideoScene } from "./scenes/get.scene";
-import { generateVideoScene } from "./scenes/generate.scene";
-import { GENERATE_VIDEO_SCENE, GET_VIDEO_SCENE } from "./constants";
+import {
+  generateImageScene,
+  generateScene,
+  generateVideoScene,
+} from "./scenes/generate.scene";
+import {
+  GENERATE_SCENE,
+  GENERATE_VIDEO_SCENE,
+  GET_VIDEO_SCENE,
+} from "./constants";
 
 export function main(bot: Telegraf<Scenes.WizardContext>) {
-  const scenes = [getVideoScene, generateVideoScene];
+  const scenes = [
+    getVideoScene,
+    generateScene,
+    generateImageScene,
+    generateVideoScene,
+  ];
   const stage = new Scenes.Stage<Scenes.SceneContext>(scenes);
 
   bot.use(session());
@@ -28,7 +41,7 @@ export function main(bot: Telegraf<Scenes.WizardContext>) {
     },
     {
       command: "help",
-      description: "Show BlastAI help",
+      description: "Show sora help",
     },
     {
       command: "socials",
@@ -38,8 +51,8 @@ export function main(bot: Telegraf<Scenes.WizardContext>) {
 
   bot.start(async (ctx) => {
     await ctx.reply(
-      "Welcome to BlastAI video generation bot. Select an action!",
-      Markup.keyboard([["/generate"], ["/get"], ["/socials"]]),
+      "Welcome to sora video generation bot. Select an action!",
+      Markup.keyboard([["/generate"], ["/get"], , ["/socials"]]),
     );
   });
 
@@ -61,7 +74,7 @@ export function main(bot: Telegraf<Scenes.WizardContext>) {
   });
 
   bot.action("generate", async (ctx) => {
-    await ctx.scene.enter(GENERATE_VIDEO_SCENE);
+    await ctx.scene.enter(GENERATE_SCENE);
   });
 
   bot.command("generate", async (ctx) => {
