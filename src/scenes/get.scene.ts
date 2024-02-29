@@ -2,7 +2,15 @@ import { Scenes, Input } from "telegraf";
 
 import { Api } from "../lib";
 import { GET_VIDEO_SCENE } from "../constants";
-import { isAxiosError } from "axios";
+import { isAxiosError, HttpStatusCode } from "axios";
+
+const errorMessage = {
+  [HttpStatusCode.BadRequest]:
+    "This error is from us, don't panick. Contact developer for more details.",
+  [HttpStatusCode.NotFound]: "No generation found for the provided ID.",
+  [HttpStatusCode.InternalServerError]:
+    "An unexpected server error has occurred, please try again later.",
+};
 
 export const getVideoScene = new Scenes.WizardScene<Scenes.WizardContext>(
   GET_VIDEO_SCENE,
@@ -26,9 +34,11 @@ export const getVideoScene = new Scenes.WizardScene<Scenes.WizardContext>(
       if (response) ctx.replyWithVideo(Input.fromBuffer(response));
       else await ctx.reply("Video still generating in background ✨!");
     } catch (error) {
-      if (isAxiosError(error))
-        await ctx.reply(error.response.data.);
-      return ctx.scene.reenter();
+      if (isAxiosError(error)) await ctx.reply(errorMessage[error.status]);
+      else {
+        await ctx.reply("An unexpected error occur, Try again!");
+        await ctx.scene.reenter();
+      }
     }
 
     ctx.scene.leave();
