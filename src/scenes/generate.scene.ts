@@ -80,8 +80,15 @@ export const generateVideoScene = new Scenes.WizardScene<Scenes.WizardContext>(
         },
       );
     } catch (error) {
-      if (isAxiosError(error))
-        await ctx.reply(error.response.data.errors.join(","));
+      if (isAxiosError(error)) {
+        const data = error.response.data;
+        if ("errors" in data) await ctx.reply(data.errors.join("."));
+        else if ("message" in data) await ctx.reply(data.message);
+        else {
+          await ctx.reply("An unexpected error occur! Try again!");
+          ctx.scene.reenter();
+        }
+      }
     }
 
     ctx.scene.leave();

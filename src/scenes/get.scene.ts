@@ -2,6 +2,7 @@ import { Scenes, Input } from "telegraf";
 
 import { Api } from "../lib";
 import { GET_VIDEO_SCENE } from "../constants";
+import { isAxiosError } from "axios";
 
 export const getVideoScene = new Scenes.WizardScene<Scenes.WizardContext>(
   GET_VIDEO_SCENE,
@@ -25,7 +26,8 @@ export const getVideoScene = new Scenes.WizardScene<Scenes.WizardContext>(
       if (response) ctx.replyWithVideo(Input.fromBuffer(response));
       else await ctx.reply("Video still generating in background ✨!");
     } catch (error) {
-      await ctx.reply("An unexpected error occur, Try again!");
+      if (isAxiosError(error))
+        await ctx.reply(error.response.data.);
       return ctx.scene.reenter();
     }
 

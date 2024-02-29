@@ -36,8 +36,8 @@ export function main(bot: Telegraf<Scenes.WizardContext>) {
     },
   ]);
 
-  bot.start((ctx) => {
-    return ctx.reply(
+  bot.start(async (ctx) => {
+    await ctx.reply(
       "Welcome to sora video generation bot. Select an action!",
       Markup.keyboard([["/get"], ["/generate"], ["/socials"]]),
     );
