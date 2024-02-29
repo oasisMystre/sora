@@ -2,6 +2,7 @@ services:
   - type: worker
     name: sora
     branch: sora-video
+    plan: standard
     envVars:
       - fromGroup: sora
     runtime: node
