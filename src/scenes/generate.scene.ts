@@ -62,7 +62,7 @@ export const generateScene = new Scenes.WizardScene<Scenes.WizardContext>(
       ]),
     );
 
-    ctx.scene.next();
+    ctx.wizard.next();
   },
   stepHandler,
 );
