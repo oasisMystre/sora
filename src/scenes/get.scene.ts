@@ -23,15 +23,14 @@ export const getVideoScene = new Scenes.WizardScene<Scenes.WizardContext>(
     const text = message.text as string;
 
     if (text.startsWith("/")) {
-      return ctx.reply(
-        "Can't run command. /cancel before running new command.",
-      );
+      ctx.reply("Can't run command. /cancel before running new command.");
+      return;
     }
 
     try {
       const response = await Api.instance.video.getVideo(text);
 
-      if (response) ctx.replyWithVideo(Input.fromBuffer(response));
+      if (response) await ctx.replyWithVideo(Input.fromBuffer(response));
       else await ctx.reply("Video still generating in background ✨!");
     } catch (error) {
       if (isAxiosError(error)) await ctx.reply(errorMessage[error.status]);
@@ -41,6 +40,6 @@ export const getVideoScene = new Scenes.WizardScene<Scenes.WizardContext>(
       }
     }
 
-    ctx.scene.leave();
+    await ctx.scene.leave();
   },
 );

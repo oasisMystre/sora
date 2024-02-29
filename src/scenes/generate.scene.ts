@@ -27,20 +27,11 @@ export const generateVideoScene = new Scenes.WizardScene<Scenes.WizardContext>(
     ctx.wizard.next();
   },
   async (ctx) => {
-    const session = ctx.session as any;
     const message = ctx.message as any;
     const text = message.text;
 
     if (text.startsWith("/")) {
-      return ctx.reply(
-        "Can't run command. /cancel before running new command.",
-      );
-    }
-
-    if (!message || text.trim().length === 0) {
-      await ctx.reply("Video generation cancelled");
-      await ctx.scene.leave();
-      session.isRetrying = false;
+      await ctx.reply("Can't run command. /cancel before running new command.");
       return;
     }
 
@@ -82,6 +73,7 @@ export const generateVideoScene = new Scenes.WizardScene<Scenes.WizardContext>(
     } catch (error) {
       if (isAxiosError(error)) {
         const data = error.response.data;
+
         if ("errors" in data) await ctx.reply(data.errors.join("."));
         else if ("message" in data) await ctx.reply(data.message);
         else {
