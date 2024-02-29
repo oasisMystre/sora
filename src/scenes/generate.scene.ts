@@ -53,7 +53,7 @@ stepHandler.use((ctx) =>
 export const generateScene = new Scenes.WizardScene<Scenes.WizardContext>(
   GENERATE_SCENE,
   (ctx) => {
-    ctx.reply(
+     await ctx.reply(
       "What do you want to generate?",
       Markup.inlineKeyboard([
         Markup.button.callback("Image", GENERATE_IMAGE_ACTION),
@@ -61,6 +61,8 @@ export const generateScene = new Scenes.WizardScene<Scenes.WizardContext>(
         Markup.button.callback("Cancel", CANCEL_ACTION),
       ]),
     );
+
+    ctx.scene.next();
   },
   stepHandler,
 );
