@@ -70,23 +70,12 @@ export const generateScene = new Scenes.WizardScene<Scenes.WizardContext>(
 export const generateImageScene = new Scenes.WizardScene<Scenes.WizardContext>(
   GENERATE_IMAGE_SCENE,
   async (ctx) => {
-    await ctx.reply(
-      "Enter your prompt?",
-      Markup.inlineKeyboard([Markup.button.callback("Cancel", CANCEL_ACTION)]),
-    );
+    await ctx.reply("Enter your prompt");
 
     ctx.wizard.next();
   },
   async (ctx) => {
     const message = (ctx.message as any).text as string;
-
-    if (message.trim().length === 0) {
-      const message = ctx.message as any;
-
-      if (!message || message.text.trim().length === 0) {
-        await ctx.scene.leave();
-        return;
-      }
 
       const { data } = await Api.instance.image.generateImage({
         text_prompts: [
