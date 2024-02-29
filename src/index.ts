@@ -39,7 +39,7 @@ export function main(bot: Telegraf<Scenes.WizardContext>) {
   bot.start(async (ctx) => {
     await ctx.reply(
       "Welcome to BlastAI video generation bot. Select an action!",
-      Markup.keyboard([["/get"], ["/generate"], ["/socials"]]),
+      Markup.keyboard([["/generate"], ["/get"], ["/socials"]]),
     );
   });
 
