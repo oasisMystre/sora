@@ -26,14 +26,17 @@ stepHandler.action(
   GENERATE_VIDEO_ACTION,
   onGenerateAction(GENERATE_VIDEO_SCENE),
 );
+
 stepHandler.action(
   GENERATE_IMAGE_ACTION,
   onGenerateAction(GENERATE_IMAGE_SCENE),
 );
+
 stepHandler.command(
   GENERATE_IMAGE_ACTION,
   onGenerateAction(GENERATE_VIDEO_SCENE),
 );
+
 stepHandler.command(
   GENERATE_VIDEO_ACTION,
   onGenerateAction(GENERATE_IMAGE_SCENE),
