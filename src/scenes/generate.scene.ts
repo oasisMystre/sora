@@ -77,7 +77,7 @@ export const generateImageScene = new Scenes.WizardScene<Scenes.WizardContext>(
   async (ctx) => {
     const message = (ctx.message as any).text as string;
     
-    if (text.startsWith("/")) {
+    if (message.startsWith("/")) {
       await ctx.reply("Can't run command. /cancel before running new command.");
       return;
     }
