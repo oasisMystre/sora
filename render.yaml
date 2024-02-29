@@ -1,0 +1,7 @@
+services:
+  - type: worker
+    name: sora
+    branch: sora-video
+    envVars:
+      - fromGroup: sora
+    runtime: node
