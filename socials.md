@@ -1,6 +1,6 @@
 Join our socials
-[Telegram](https://t.me/soraicommunity)
-[X](https://x.com/soraibot)
+[Telegram](https://t.me/blastAI_)
+[X](https://x.com/blastAI_)
 
 Or visit our website
-[$SORAI](https://soraibot.io)
+[BlastAI](https://blastai.io)

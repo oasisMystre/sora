@@ -1,7 +1,7 @@
-*SORA*
+*BlastAI*
 
 I can help you create ai generated images and videos,
-if you are new to Sora Bot, please read the below manual
+if you are new to BlastAI Bot, please read the below manual
 
 You can control me by sending these commands:
 

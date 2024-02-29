@@ -1,10 +1,10 @@
 services:
   - type: worker
-    name: sora
-    branch: sora-video
+    name: blast
+    branch: blast-ai-bot
     plan: standard
     envVars:
-      - fromGroup: sora
+      - fromGroup: blastai
     runtime: node
     startCommand: pnpm start
     buildCommand: pnpm install && tsc

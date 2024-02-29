@@ -28,7 +28,7 @@ export function main(bot: Telegraf<Scenes.WizardContext>) {
     },
     {
       command: "help",
-      description: "Show sora help",
+      description: "Show BlastAI help",
     },
     {
       command: "socials",
@@ -38,7 +38,7 @@ export function main(bot: Telegraf<Scenes.WizardContext>) {
 
   bot.start(async (ctx) => {
     await ctx.reply(
-      "Welcome to sora video generation bot. Select an action!",
+      "Welcome to BlastAI video generation bot. Select an action!",
       Markup.keyboard([["/get"], ["/generate"], ["/socials"]]),
     );
   });

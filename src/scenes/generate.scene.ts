@@ -36,7 +36,7 @@ export const generateVideoScene = new Scenes.WizardScene<Scenes.WizardContext>(
     }
 
     await ctx.reply(
-      "$SORAI is generating your Video ID.\n Video Generation might take up to a minute or more.",
+      "BlastAI is generating your Video ID.\n Video Generation might take up to a minute or more.",
     );
 
     try {
