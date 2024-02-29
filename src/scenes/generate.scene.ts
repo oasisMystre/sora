@@ -76,23 +76,27 @@ export const generateImageScene = new Scenes.WizardScene<Scenes.WizardContext>(
   },
   async (ctx) => {
     const message = (ctx.message as any).text as string;
-
-      const { data } = await Api.instance.image.generateImage({
-        text_prompts: [
-          {
-            text: message,
-          },
-        ],
-      });
-
-      for (const artifact of data.artifacts) {
-        await ctx.replyWithPhoto({
-          source: Buffer.from(artifact.base64, "base64"),
-        });
-      }
-
-      await ctx.scene.leave();
+    
+    if (text.startsWith("/")) {
+      await ctx.reply("Can't run command. /cancel before running new command.");
+      return;
     }
+
+    const { data } = await Api.instance.image.generateImage({
+      text_prompts: [
+        {
+          text: message,
+        },
+      ],
+    });
+
+    for (const artifact of data.artifacts) {
+      await ctx.replyWithPhoto({
+        source: Buffer.from(artifact.base64, "base64"),
+      });
+    }
+
+    await ctx.scene.leave();
   },
 );
 
