@@ -3,9 +3,7 @@ import "dotenv/config";
 import { Telegraf, Scenes, session, Markup } from "telegraf";
 
 import { getVideoScene } from "./scenes/get.scene";
-import {
-]generateVideoScene,
-} from "./scenes/generate.scene";
+import { generateVideoScene } from "./scenes/generate.scene";
 import {
   GENERATE_SCENE,
   GENERATE_VIDEO_SCENE,
@@ -13,10 +11,7 @@ import {
 } from "./constants";
 
 export function main(bot: Telegraf<Scenes.WizardContext>) {
-  const scenes = [
-    getVideoScene,
-    generateVideoScene,
-  ];
+  const scenes = [getVideoScene, generateVideoScene];
   const stage = new Scenes.Stage<Scenes.SceneContext>(scenes);
 
   bot.use(session());
@@ -81,7 +76,7 @@ export function main(bot: Telegraf<Scenes.WizardContext>) {
     await ctx.replyWithMarkdownV2(fs.readFileSync("./socials.md", "utf-8"));
   });
 
-  bot.catch((err: any, ctx) => {
+  bot.catch(async (err: any, ctx) => {
     console.error(err);
     try {
       await ctx.reply("Message not sent due to an error.");
