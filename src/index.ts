@@ -1,7 +1,7 @@
 import "dotenv/config";
 
 import fs from "fs";
-import { fastify } from "fastify";
+import Fastify from "fastify";
 import { Telegraf, Scenes, session, Markup } from "telegraf";
 
 import { getVideoScene } from "./scenes/get.scene";
@@ -92,7 +92,9 @@ export function createBot(accessToken: string) {
   return bot;
 }
 async function main() {
-  const app = fastify();
+  const app = Fastify({
+    logger: true,
+  });
   const bot = createBot(process.env.TELEGRAM_BOT_API_KEY);
 
   const port = Number(process.env.PORT);
@@ -101,8 +103,13 @@ async function main() {
   }) as any;
 
   app.post(`/telegraf/${bot.secretPathComponent()}`, webhook);
-
-  app.listen({ port }).then(() => console.log("Listening on port", port));
+  try {
+  await app.listen({ port });
+  console.log("Listening on port", port);
+  } catch(err){
+    app.log.error(err);
+    process.exit(1);
+  }
 }
 
 main().catch(console.log);
