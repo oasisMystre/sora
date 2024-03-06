@@ -103,9 +103,10 @@ async function main() {
   }) as any;
 
   app.post(`/telegraf/${bot.secretPathComponent()}`, webhook);
+  
   try {
-  await app.listen({ port });
-  console.log("Listening on port", port);
+    await app.listen({ port, host: "0.0.0.0" });
+    console.log("Listening on port", port);
   } catch(err){
     app.log.error(err);
     process.exit(1);
