@@ -1,5 +1,7 @@
-import fs from "fs";
 import "dotenv/config";
+
+import fs from "fs";
+import { fastify } from "fastify";
 import { Telegraf, Scenes, session, Markup } from "telegraf";
 
 import { getVideoScene } from "./scenes/get.scene";
@@ -10,7 +12,9 @@ import {
   GET_VIDEO_SCENE,
 } from "./constants";
 
-export function main(bot: Telegraf<Scenes.WizardContext>) {
+export function createBot(accessToken: string) {
+  const bot = new Telegraf<Scenes.WizardContext>(accessToken);
+
   const scenes = [getVideoScene, generateVideoScene];
   const stage = new Scenes.Stage<Scenes.SceneContext>(scenes);
 
@@ -84,16 +88,21 @@ export function main(bot: Telegraf<Scenes.WizardContext>) {
       console.error("Could not send error message to chat: ", err);
     }
   });
+
+  return bot;
+}
+async function main() {
+  const app = fastify();
+  const bot = createBot(process.env.TELEGRAM_BOT_API_KEY);
+
+  const port = Number(process.env.PORT);
+  const webhook = await bot.createWebhook({
+    domain: process.env.RENDER_EXTERNAL_HOSTNAME,
+  }) as any;
+
+  app.post(`/telegraf/${bot.secretPathComponent()}`, webhook);
+
+  app.listen({ port }).then(() => console.log("Listening on port", port));
 }
 
-const bot = new Telegraf<Scenes.WizardContext>(
-  process.env.TELEGRAM_BOT_API_KEY,
-);
-
-main(bot);
-
-console.log("Bot starting...");
-bot.launch();
-
-process.once("SIGINT", () => bot.stop("SIGINT"));
-process.once("SIGTERM", () => bot.stop("SIGTERM"));
+main().catch(console.log);

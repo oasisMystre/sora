@@ -1,8 +1,10 @@
 services:
-  - type: worker
+  - type: web
     name: sora
     branch: sora-video
-    plan: standard
+    plan: starter
+    domains:
+      - sorai-video-gen.onrender.com
     envVars:
       - fromGroup: sora
     runtime: node
