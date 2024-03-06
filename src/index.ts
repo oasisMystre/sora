@@ -4,9 +4,7 @@ import { Telegraf, Scenes, session, Markup } from "telegraf";
 
 import { getVideoScene } from "./scenes/get.scene";
 import {
-  generateImageScene,
-  generateScene,
-  generateVideoScene,
+]generateVideoScene,
 } from "./scenes/generate.scene";
 import {
   GENERATE_SCENE,
@@ -17,8 +15,6 @@ import {
 export function main(bot: Telegraf<Scenes.WizardContext>) {
   const scenes = [
     getVideoScene,
-    generateScene,
-    generateImageScene,
     generateVideoScene,
   ];
   const stage = new Scenes.Stage<Scenes.SceneContext>(scenes);
@@ -83,6 +79,15 @@ export function main(bot: Telegraf<Scenes.WizardContext>) {
 
   bot.command("socials", async (ctx) => {
     await ctx.replyWithMarkdownV2(fs.readFileSync("./socials.md", "utf-8"));
+  });
+
+  bot.catch((err: any, ctx) => {
+    console.error(err);
+    try {
+      await ctx.reply("Message not sent due to an error.");
+    } catch (e) {
+      console.error("Could not send error message to chat: ", err);
+    }
   });
 }
 
